@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prashna - Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .chat-container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #3f51b5;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            border-bottom: 1px solid #ccc;
+        }
+        .chat-messages {
+            height: 300px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            border-radius: 4px;
+        }
+        .user-message {
+            background-color: #e3f2fd;
+            text-align: right;
+        }
+        .bot-message {
+            background-color: #c8e6c9;
+            text-align: left;
+        }
+        .chat-input {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-top: 1px solid #ccc;
+        }
+        .chat-input input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .chat-input button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #3f51b5;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .chat-input button:hover {
+            background-color: #2c387e;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            Prashna - Your Chatbot
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <!-- Chat messages will be rendered here dynamically -->
+        </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#send-button').click(function() {
+                sendMessage();
+            });
+
+            $('#user-input').keypress(function(e) {
+                if (e.which === 13) {
+                    sendMessage();
+                }
+            });
+
+            /*function sendMessage() {
+                var userChat = $('#user-input').val().trim();
+                if (userChat) {
+                    // Append user message to chat messages
+                    $('#chat-messages').append('<div class="message user-message">' + userChat + '</div>');
+
+                    // Send user message to backend via AJAX
+                    $.ajax({
+                        url: '/api/chat/',
+                        method: 'POST',
+                        data: { user_chat: userChat },
+                        success: function(response) {
+                            // Append chatbot response to chat messages
+                            $('#chat-messages').append('<div class="message bot-message">' + response.response_chat + '</div>');
+                            // Scroll to bottom of chat messages
+                            $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                        },
+                        error: function(error) {
+                            console.error('Error:', error);
+                        }
+                    });
+
+                    // Clear input field after sending message
+                    $('#user-input').val('');
+                }
+            }*/
+            
+            function sendMessage() {
+    var userChat = $('#user-input').val().trim();
+    if (userChat) {
+        // Append user message to chat messages
+        $('#chat-messages').append('<div class="message user-message">' + userChat + '</div>');
+
+        // Send user message to backend via AJAX
+        $.ajax({
+            url: '/api/chat/',
+            method: 'POST',
+            data: { user_chat: userChat }, // Ensure key matches backend expectation
+            success: function(response) {
+                // Append chatbot response to chat messages
+                $('#chat-messages').append('<div class="message bot-message">' + response.response_chat + '</div>');
+                // Scroll to bottom of chat messages
+                $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+
+        // Clear input field after sending message
+        $('#user-input').val('');
+    }
+}
+
+
+        });
+    </script>
+</body>
+</html>
